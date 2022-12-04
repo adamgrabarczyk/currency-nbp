@@ -1,58 +1,50 @@
 <template>
   <search-sort />
-  <v-card>
-    <v-layout>
-      <v-navigation-drawer expand-on-hover rail>
-        <v-list>
-          <v-list-item
-            prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
-            title="Sandra Adams"
-            subtitle="sandra_a88@gmailcom"
-          ></v-list-item>
-        </v-list>
-
-        <v-divider></v-divider>
-
-        <v-list density="compact" nav>
-          <v-list-item
-            prepend-icon="mdi-folder"
-            title="My Files"
-            value="myfiles"
-          ></v-list-item>
-          <v-list-item
-            prepend-icon="mdi-account-multiple"
-            title="Shared with me"
-            value="shared"
-          ></v-list-item>
-          <v-list-item
-            prepend-icon="mdi-star"
-            title="Starred"
-            value="starred"
-          ></v-list-item>
-        </v-list>
-      </v-navigation-drawer>
-
-      <v-main style="height: 250px"></v-main>
-    </v-layout>
-  </v-card>
+  <v-table>
+    <thead>
+      <tr>
+        <th class="text-left">Currency name</th>
+        <th class="text-left">Calories</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in currentArray" :key="item.code">
+        <td>{{ item.currency }}</td>
+        <td>{{ item.mid }}</td>
+      </tr>
+    </tbody>
+  </v-table>
+  <PaginationFooter />
 </template>
 <script>
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import SearchSort from "@/components/SearchSort";
+import PaginationFooter from "@/components/PaginationFooter";
 
 const Api = "http://api.nbp.pl/api/exchangerates/tables/b";
 export default {
-  components: { SearchSort },
-
+  components: { PaginationFooter, SearchSort },
   setup() {
     const data = ref(null);
+    const currentArray = ref(null);
+    const currentPage = ref(1);
     const getData = () => {
       axios
         .get(Api)
         .then((response) => {
-          data.value = response.data[0].rates;
+          data.value = [];
+          const chunkSize = 10;
+          const dataArr = response.data[0].rates;
+          for (let i = 0; i < dataArr.length; i += chunkSize) {
+            const chunk = dataArr.slice(i, i + chunkSize);
+            console.log(chunk);
+            data.value.push(chunk);
+          }
           console.log(data.value);
+          console.log(currentPage.value);
+          currentArray.value = data.value[0];
+          console.log(currentArray.value);
         })
         .catch((error) => {
           console.log(error);
@@ -62,7 +54,7 @@ export default {
       await getData();
     });
 
-    return { data };
+    return { data, currentArray };
   },
 };
 </script>
