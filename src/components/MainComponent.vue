@@ -37,8 +37,32 @@
   </v-card>
 </template>
 <script>
+import { onMounted, ref } from "vue";
+import axios from "axios";
 import SearchSort from "@/components/SearchSort";
+
+const Api = "http://api.nbp.pl/api/exchangerates/tables/b";
 export default {
   components: { SearchSort },
+
+  setup() {
+    const data = ref(null);
+    const getData = () => {
+      axios
+        .get(Api)
+        .then((response) => {
+          data.value = response.data[0].rates;
+          console.log(data.value);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    onMounted(async () => {
+      await getData();
+    });
+
+    return { data };
+  },
 };
 </script>
