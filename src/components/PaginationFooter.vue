@@ -5,12 +5,14 @@
 </template>
 
 <script>
+let b;
 export default {
   name: "PaginationFooter",
+  props: b,
 
   data() {
     return {
-      page: 1,
+      page: b,
     };
   },
 };

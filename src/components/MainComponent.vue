@@ -14,21 +14,43 @@
       </tr>
     </tbody>
   </v-table>
-  <PaginationFooter />
+  <div class="text-center">
+    <v-pagination
+      v-model="currentPage"
+      :length="12"
+      @update:modelValue="pageChange"
+    ></v-pagination>
+  </div>
+  <div v-on:click="log"><p>blah</p></div>
 </template>
 <script>
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import SearchSort from "@/components/SearchSort";
-import PaginationFooter from "@/components/PaginationFooter";
+// import PaginationFooter from "@/components/PaginationFooter";
 
-const Api = "http://api.nbp.pl/api/exchangerates/tables/b";
+const Api = "https://api.nbp.pl/api/exchangerates/tables/b";
 export default {
-  components: { PaginationFooter, SearchSort },
+  components: { SearchSort },
   setup() {
     const data = ref(null);
-    const currentArray = ref(null);
     const currentPage = ref(1);
+    const currentArray = ref(null);
+
+    const log = () => {
+      console.log(currentPage.value);
+      console.log(currentArray.value);
+    };
+
+    const pageChange = () => {
+      console.log(currentPage.value);
+      currentArray.value = data.value[currentPage.value - 1];
+    };
+
+    if (currentPage.value == 2) {
+      alert("ble");
+    }
+
     const getData = () => {
       axios
         .get(Api)
@@ -54,7 +76,7 @@ export default {
       await getData();
     });
 
-    return { data, currentArray };
+    return { data, currentArray, currentPage, log, pageChange };
   },
 };
 </script>
