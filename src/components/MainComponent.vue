@@ -1,6 +1,20 @@
 <template>
   <search-sort />
-
+  <div>
+    <v-text-field label="Main input" hide-details="auto"></v-text-field>
+    <v-text-field label="Another input"></v-text-field>
+    <v-text-field
+      v-model="searchPhrase"
+      @input="handleInput"
+      @click:clear="clearSearchPhrase"
+      clearable
+      flat
+      solo-inverted
+      hide-details
+      prepend-inner-icon="mdi-magnify"
+      label="Szukaj"
+    ></v-text-field>
+  </div>
   <div class="pa-4">
     <v-chip v-if="isActive" v-on:click="sortByName" class="text">
       Filtruj po nazwie
@@ -50,46 +64,65 @@ export default {
     const data = ref(null);
     const currentPage = ref(1);
     const currentArray = ref(null);
+    const protectedCurrentArray = ref(null);
     const active = ref(false);
     const isActive = ref(false);
+    const searchPhrase = ref("");
 
     const log = () => {
+      console.log(sort(currentArray.value));
       console.log(active.value);
-      console.log(currentPage.value);
-      console.log(currentArray.value);
-      console.log(data.value[currentPage.value - 1]);
+      console.log(isActive.value);
+      // console.log(currentPage.value);
+      // console.log(currentArray.value);
+      // console.log(data.value[currentPage.value - 1]);
+    };
+
+    const clearSearchPhrase = () => {
+      currentArray.value = protectedCurrentArray.value;
+    };
+
+    const handleInput = () => {
+      let copyArr = protectedCurrentArray.value.slice();
+      const searchValue = copyArr.filter((item) =>
+        item.currency
+          .toLocaleLowerCase()
+          .includes(searchPhrase.value.toLocaleLowerCase())
+      );
+      console.log(searchValue);
+      currentArray.value = searchValue;
+    };
+
+    const sort = (arr, func) => {
+      const sorted = arr.sort((a, b) => {
+        if (func === "value" ? a.mid < b.mid : a.currency < b.currency) {
+          return -1;
+        }
+        if (func === "value" ? a.mid > b.mid : a.currency < b.currency) {
+          return 1;
+        }
+        return 0;
+      });
+      return sorted;
     };
 
     const pageChange = () => {
       console.log(currentPage.value);
       let copyArr = data.value[currentPage.value - 1].slice();
       if (active.value) {
-        const sorted = copyArr.sort(function (a, b) {
-          if (a.mid < b.mid) {
-            return -1;
-          }
-          if (a.mid > b.mid) {
-            return 1;
-          }
-          return 0;
-        });
+        const sorted = sort(copyArr, "value");
         currentArray.value = sorted;
+        protectedCurrentArray.value = sorted;
       } else {
         currentArray.value = copyArr;
+        protectedCurrentArray.value = copyArr;
       }
+      searchPhrase.value = "";
     };
 
     const sortByName = () => {
-      const sorted = currentArray.value.sort(function (a, b) {
-        if (a.currency < b.currency) {
-          return -1;
-        }
-        if (a.currency > b.currency) {
-          return 1;
-        }
-        return 0;
-      });
-      console.log(sorted);
+      sort(currentArray.value);
+      sort(protectedCurrentArray.value);
       active.value = false;
       isActive.value = !isActive.value;
     };
@@ -97,18 +130,12 @@ export default {
     const sortByValue = () => {
       let table = currentArray.value.slice();
       if (active.value === false) {
-        const sorted = table.sort(function (a, b) {
-          if (a.mid < b.mid) {
-            return -1;
-          }
-          if (a.mid > b.mid) {
-            return 1;
-          }
-          return 0;
-        });
+        const sorted = sort(table, "value");
         currentArray.value = sorted;
+        protectedCurrentArray.value = sorted;
       } else {
         currentArray.value = data.value[currentPage.value - 1];
+        protectedCurrentArray.value = data.value[currentPage.value - 1];
       }
       isActive.value = false;
       active.value = !active.value;
@@ -144,6 +171,9 @@ export default {
       sortByValue,
       active,
       isActive,
+      searchPhrase,
+      handleInput,
+      clearSearchPhrase,
     };
   },
 };
