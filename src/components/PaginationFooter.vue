@@ -1,19 +1,9 @@
 <template>
-  <div class="text-center">
-    <v-pagination v-model="page" :length="6"></v-pagination>
-  </div>
+  <v-pagination :length="12" class="pagination"></v-pagination>
 </template>
 
 <script>
-let b;
 export default {
   name: "PaginationFooter",
-  props: b,
-
-  data() {
-    return {
-      page: b,
-    };
-  },
 };
 </script>

@@ -5,7 +5,7 @@ export function useData() {
   const Api = "https://api.nbp.pl/api/exchangerates/tables/b";
   const data = ref(null);
   const currentPage = ref(1);
-  const currentArray = ref(null);
+  const currentArray = ref([]);
   const currentArrayWithPhrase = ref(null);
   const protectedCurrentArray = ref(null);
   const active = ref(false);
@@ -30,6 +30,7 @@ export function useData() {
         .includes(searchPhrase.value.toLocaleLowerCase())
     );
     console.log(searchValue);
+    console.log(currentArrayWithPhrase.value);
     if (searchPhrase.value.length > 2) {
       currentArray.value = searchValue;
       currentArrayWithPhrase.value = searchValue;
@@ -40,7 +41,10 @@ export function useData() {
   };
 
   const arrL = () => {
-    if (currentArray.value.lenght > 0) {
+    if (
+      currentArrayWithPhrase.value != null &&
+      currentArrayWithPhrase.value.lenght > 0
+    ) {
       return true;
     } else {
       return false;

@@ -1,62 +1,61 @@
 <template>
   <div class="container">
-    <search-sort />
-    <div>
-      <v-text-field
-        v-model="searchPhrase"
-        @input="handleInput"
-        @click:clear="clearSearchPhrase"
-        clearable
-        flat
-        solo-inverted
-        hide-details
-        prepend-inner-icon="mdi-magnify"
-        label="Szukaj"
-      ></v-text-field>
-    </div>
+    <ImageWrapper />
+    <h1 class="header-text">
+      Aktualny kursu walut - API Narodowego Banku Polskiego
+    </h1>
+    <search-bar
+      v-model="searchPhrase"
+      @input="handleInput"
+      @click:clear="clearSearchPhrase"
+    />
     <div class="pa-4">
-      <v-chip v-if="isActive" v-on:click="sortByName" class="text">
+      <v-chip v-if="isActive" v-on:click="sortByName" class="text filterButton">
         Filtruj po nazwie
       </v-chip>
-      <v-chip v-else v-on:click="sortByName"> Filtruj po nazwie </v-chip>
-      <v-chip v-if="active" v-on:click="sortByValue" class="text">
+      <v-chip v-else v-on:click="sortByName" class="filterButton">
+        Filtruj po nazwie
+      </v-chip>
+      <v-chip v-if="active" v-on:click="sortByValue" class="text filterButton">
         Filtruj po cenie (od najmniejszej)
       </v-chip>
-      <v-chip v-else v-on:click="sortByValue">
+      <v-chip v-else v-on:click="sortByValue" class="filterButton">
         Filtruj po cenie (od najmniejszej)
       </v-chip>
     </div>
 
-    <v-table>
+    <v-table height="450px">
       <thead>
         <tr>
           <th class="text-left">Waluta</th>
           <th class="text-left">Cena w przeliczeniu na 1 zł</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="currentArray.length > 0">
         <tr v-for="item in currentArray" :key="item.code">
           <td>{{ item.currency }}</td>
           <td>{{ item.mid }}</td>
         </tr>
       </tbody>
+      <tbody v-else>
+        <tr>
+          <td class="no-results" colspan="2">Brak wyników wyszykiwania</td>
+        </tr>
+      </tbody>
     </v-table>
     <div class="text-center">
-      <v-pagination
-        v-model="currentPage"
-        :length="12"
-        @update:modelValue="pageChange"
-      ></v-pagination>
+      <PaginationFooter v-model="currentPage" @update:modelValue="pageChange" />
     </div>
-    <div v-on:click="log"><p>blah</p></div>
   </div>
 </template>
 <script>
-import SearchSort from "@/components/SearchSort";
+import SearchBar from "@/components/SearchBar";
 import { useData } from "@/composables/useData";
+import PaginationFooter from "@/components/PaginationFooter";
+import ImageWrapper from "@/components/ImageWrapper";
 
 export default {
-  components: { SearchSort },
+  components: { ImageWrapper, PaginationFooter, SearchBar },
   setup() {
     const {
       data,
