@@ -58,10 +58,8 @@ export default {
   components: { ImageWrapper, PaginationFooter, SearchBar },
   setup() {
     const {
-      data,
       currentArray,
       currentPage,
-      log,
       pageChange,
       sortByName,
       sortByValue,
@@ -70,14 +68,11 @@ export default {
       searchPhrase,
       handleInput,
       clearSearchPhrase,
-      arrL,
     } = useData();
 
     return {
-      data,
       currentArray,
       currentPage,
-      log,
       pageChange,
       sortByName,
       sortByValue,
@@ -86,7 +81,6 @@ export default {
       searchPhrase,
       handleInput,
       clearSearchPhrase,
-      arrL,
     };
   },
 };

@@ -12,42 +12,32 @@ export function useData() {
   const isActive = ref(false);
   const searchPhrase = ref("");
 
-  const log = () => {
-    console.log(sort(currentArray.value));
-    console.log(active.value);
-    console.log(isActive.value);
-  };
-
   const clearSearchPhrase = () => {
-    currentArray.value = protectedCurrentArray.value;
+    const copyArr = protectedCurrentArray.value;
+    if (active.value) {
+      const sorted = sort(copyArr, "value");
+      currentArray.value = sorted;
+      protectedCurrentArray.value = sorted;
+    } else {
+      currentArray.value = copyArr;
+    }
+    currentArrayWithPhrase.value = [];
+    searchPhrase.value = "";
   };
 
   const handleInput = () => {
-    const copyArr = protectedCurrentArray.value.slice();
+    const copyArr = protectedCurrentArray.value;
     const searchValue = copyArr.filter((item) =>
       item.currency
         .toLocaleLowerCase()
         .includes(searchPhrase.value.toLocaleLowerCase())
     );
-    console.log(searchValue);
-    console.log(currentArrayWithPhrase.value);
     if (searchPhrase.value.length > 2) {
       currentArray.value = searchValue;
       currentArrayWithPhrase.value = searchValue;
     } else if (searchPhrase.value.length < 3) {
       currentArray.value = protectedCurrentArray.value;
       currentArrayWithPhrase.value = protectedCurrentArray.value;
-    }
-  };
-
-  const arrL = () => {
-    if (
-      currentArrayWithPhrase.value != null &&
-      currentArrayWithPhrase.value.lenght > 0
-    ) {
-      return true;
-    } else {
-      return false;
     }
   };
 
@@ -65,7 +55,7 @@ export function useData() {
   };
 
   const pageChange = () => {
-    const copyArr = data.value[currentPage.value - 1].slice();
+    const copyArr = data.value[currentPage.value - 1];
     if (active.value) {
       const sorted = sort(copyArr, "value");
       currentArray.value = sorted;
@@ -85,12 +75,15 @@ export function useData() {
   };
 
   const sortByValue = () => {
-    const table = [...currentArray.value.slice()];
+    const table = [...currentArray.value];
     if (active.value === false) {
       const sorted = sort(table, "value");
       currentArray.value = sorted;
+    } else if (active.value) {
+      const sorted = sort(table, "");
+      currentArray.value = sorted;
     } else if (searchPhrase.value != "") {
-      const table = [...currentArrayWithPhrase.value.slice()];
+      const table = [...currentArrayWithPhrase.value];
       const sorted = sort(table, "");
       currentArray.value = sorted;
     } else {
@@ -125,7 +118,6 @@ export function useData() {
     data,
     currentArray,
     currentPage,
-    log,
     pageChange,
     sortByName,
     sortByValue,
@@ -134,6 +126,5 @@ export function useData() {
     searchPhrase,
     handleInput,
     clearSearchPhrase,
-    arrL,
   };
 }
