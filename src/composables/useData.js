@@ -1,8 +1,9 @@
 import { onBeforeMount, ref } from "vue";
 import axios from "axios";
+import { baseApiUrl } from "../../utils/api";
 
 export function useData() {
-  const Api = "https://api.nbp.pl/api/exchangerates/tables/b";
+  const Api = baseApiUrl;
   const data = ref(null);
   const currentPage = ref(1);
   const currentArray = ref([]);
