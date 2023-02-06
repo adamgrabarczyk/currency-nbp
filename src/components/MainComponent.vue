@@ -10,16 +10,18 @@
       @click:clear="clearSearchPhrase"
     />
     <div class="pa-4">
-      <v-chip v-if="isActive" v-on:click="sortByName" class="text filterButton">
+      <v-chip
+        v-on:click="sortByName"
+        class="filterButton"
+        :class="{ text: isActive === true }"
+      >
         Filtruj po nazwie
       </v-chip>
-      <v-chip v-else v-on:click="sortByName" class="filterButton">
-        Filtruj po nazwie
-      </v-chip>
-      <v-chip v-if="active" v-on:click="sortByValue" class="text filterButton">
-        Filtruj po cenie (od najmniejszej)
-      </v-chip>
-      <v-chip v-else v-on:click="sortByValue" class="filterButton">
+      <v-chip
+        v-on:click="sortByValue"
+        class="filterButton"
+        :class="{ text: active === true }"
+      >
         Filtruj po cenie (od najmniejszej)
       </v-chip>
     </div>
@@ -43,7 +45,7 @@
         </tr>
       </tbody>
     </v-table>
-    <div class="text-center">
+    <div>
       <PaginationFooter v-model="currentPage" @update:modelValue="pageChange" />
     </div>
   </div>
