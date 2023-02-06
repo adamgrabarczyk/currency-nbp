@@ -45,7 +45,7 @@
         </tr>
       </tbody>
     </v-table>
-    <div>
+    <div class="text-center">
       <PaginationFooter v-model="currentPage" @update:modelValue="pageChange" />
     </div>
   </div>
