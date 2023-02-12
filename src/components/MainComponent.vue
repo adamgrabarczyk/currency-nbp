@@ -15,25 +15,26 @@
       :active="active"
       :is-active="isActive"
     />
-    <v-table height="450px">
-      <thead>
-        <tr>
-          <th class="text-left">Waluta</th>
-          <th class="text-left">Cena w przeliczeniu na 1 zł</th>
-        </tr>
-      </thead>
-      <tbody v-if="currentArray.length > 0">
-        <tr v-for="item in currentArray" :key="item.code">
-          <td>{{ item.currency }}</td>
-          <td>{{ item.mid }}</td>
-        </tr>
-      </tbody>
-      <tbody v-else>
-        <tr>
-          <td class="no-results" colspan="2">Brak wyników wyszykiwania</td>
-        </tr>
-      </tbody>
-    </v-table>
+    <CurrencyList :arr="currentArray" />
+    <!--    <v-table height="450px">-->
+    <!--      <thead>-->
+    <!--        <tr>-->
+    <!--          <th class="text-left">Waluta</th>-->
+    <!--          <th class="text-left">Cena w przeliczeniu na 1 zł</th>-->
+    <!--        </tr>-->
+    <!--      </thead>-->
+    <!--      <tbody v-if="currentArray.length > 0">-->
+    <!--        <tr v-for="item in currentArray" :key="item.code">-->
+    <!--          <td>{{ item.currency }}</td>-->
+    <!--          <td>{{ item.mid }}</td>-->
+    <!--        </tr>-->
+    <!--      </tbody>-->
+    <!--      <tbody v-else>-->
+    <!--        <tr>-->
+    <!--          <td class="no-results" colspan="2">Brak wyników wyszykiwania</td>-->
+    <!--        </tr>-->
+    <!--      </tbody>-->
+    <!--    </v-table>-->
     <PaginationFooter v-model="currentPage" @update:modelValue="pageChange" />
   </div>
 </template>
@@ -43,9 +44,16 @@ import { useData } from "@/composables/useData";
 import PaginationFooter from "@/components/PaginationFooter";
 import ImageWrapper from "@/components/ImageWrapper";
 import FiltersComponent from "@/components/FiltersComponent";
+import CurrencyList from "@/components/CurrencyList";
 
 export default {
-  components: { FiltersComponent, ImageWrapper, PaginationFooter, SearchBar },
+  components: {
+    CurrencyList,
+    FiltersComponent,
+    ImageWrapper,
+    PaginationFooter,
+    SearchBar,
+  },
   setup() {
     const {
       currentArray,
