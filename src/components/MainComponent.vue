@@ -9,23 +9,12 @@
       @input="handleInput"
       @click:clear="clearSearchPhrase"
     />
-    <div class="pa-4">
-      <v-chip
-        v-on:click="sortByName"
-        class="filterButton"
-        :class="{ text: isActive === true }"
-      >
-        Filtruj po nazwie
-      </v-chip>
-      <v-chip
-        v-on:click="sortByValue"
-        class="filterButton"
-        :class="{ text: active === true }"
-      >
-        Filtruj po cenie (od najmniejszej)
-      </v-chip>
-    </div>
-
+    <FiltersComponent
+      @sort-by-value="sortByValue"
+      @sort-by-name="sortByName"
+      :active="active"
+      :is-active="isActive"
+    />
     <v-table height="450px">
       <thead>
         <tr>
@@ -55,9 +44,10 @@ import SearchBar from "@/components/SearchBar";
 import { useData } from "@/composables/useData";
 import PaginationFooter from "@/components/PaginationFooter";
 import ImageWrapper from "@/components/ImageWrapper";
+import FiltersComponent from "@/components/FiltersComponent";
 
 export default {
-  components: { ImageWrapper, PaginationFooter, SearchBar },
+  components: { FiltersComponent, ImageWrapper, PaginationFooter, SearchBar },
   setup() {
     const {
       currentArray,
