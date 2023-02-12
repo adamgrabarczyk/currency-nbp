@@ -16,25 +16,6 @@
       :is-active="isActive"
     />
     <CurrencyList :arr="currentArray" />
-    <!--    <v-table height="450px">-->
-    <!--      <thead>-->
-    <!--        <tr>-->
-    <!--          <th class="text-left">Waluta</th>-->
-    <!--          <th class="text-left">Cena w przeliczeniu na 1 zł</th>-->
-    <!--        </tr>-->
-    <!--      </thead>-->
-    <!--      <tbody v-if="currentArray.length > 0">-->
-    <!--        <tr v-for="item in currentArray" :key="item.code">-->
-    <!--          <td>{{ item.currency }}</td>-->
-    <!--          <td>{{ item.mid }}</td>-->
-    <!--        </tr>-->
-    <!--      </tbody>-->
-    <!--      <tbody v-else>-->
-    <!--        <tr>-->
-    <!--          <td class="no-results" colspan="2">Brak wyników wyszykiwania</td>-->
-    <!--        </tr>-->
-    <!--      </tbody>-->
-    <!--    </v-table>-->
     <PaginationFooter v-model="currentPage" @update:modelValue="pageChange" />
   </div>
 </template>
