@@ -1,4 +1,4 @@
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 import axios from "axios";
 import { baseApiUrl } from "../../utils/api";
 
@@ -44,30 +44,24 @@ export function useData() {
 
   const sort = (arr, func) => {
     const sorted = arr.sort((a, b) => {
-      if (func === "value" ? a.mid < b.mid : a.currency < b.currency) {
+      if (
+        func === "value"
+          ? a.mid < b.mid
+          : a.currency.toLowerCase() < b.currency.toLowerCase()
+      ) {
         return -1;
       }
-      if (func === "value" ? a.mid > b.mid : a.currency < b.currency) {
+      if (
+        func === "value"
+          ? a.mid > b.mid
+          : a.currency.toLowerCase() < b.currency.toLowerCase()
+      ) {
         return 1;
       }
       return 0;
     });
     return sorted;
   };
-
-  const pageChange = () => {
-    const copyArr = data.value[currentPage.value - 1];
-    if (active.value) {
-      const sorted = sort(copyArr, "value");
-      currentArray.value = sorted;
-      protectedCurrentArray.value = sorted;
-    } else {
-      currentArray.value = copyArr;
-      protectedCurrentArray.value = copyArr;
-    }
-    searchPhrase.value = "";
-  };
-
   const sortByName = () => {
     sort(currentArray.value);
     sort(protectedCurrentArray.value);
@@ -93,6 +87,17 @@ export function useData() {
     isActive.value = false;
     active.value = !active.value;
   };
+
+  watch(currentPage, (newValue) => {
+    protectedCurrentArray.value = data.value[newValue - 1];
+    if (active.value) {
+      currentArray.value = sort(protectedCurrentArray.value, "value");
+    } else {
+      currentArray.value = protectedCurrentArray.value;
+    }
+    searchPhrase.value = "";
+  });
+
   const getData = () => {
     axios
       .get(Api)
@@ -119,7 +124,6 @@ export function useData() {
     data,
     currentArray,
     currentPage,
-    pageChange,
     sortByName,
     sortByValue,
     active,

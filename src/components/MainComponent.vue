@@ -16,7 +16,7 @@
       :is-active="isActive"
     />
     <CurrencyList :arr="currentArray" />
-    <PaginationFooter v-model="currentPage" @update:modelValue="pageChange" />
+    <PaginationFooter v-model="currentPage" />
   </div>
 </template>
 <script>
@@ -39,7 +39,6 @@ export default {
     const {
       currentArray,
       currentPage,
-      pageChange,
       sortByName,
       sortByValue,
       active,
@@ -52,7 +51,6 @@ export default {
     return {
       currentArray,
       currentPage,
-      pageChange,
       sortByName,
       sortByValue,
       active,
