@@ -1,25 +1,23 @@
 <template>
   <div class="pa-4">
-    <v-chip
-      @click="sortByName"
-      class="filterButton"
-      :class="{ text: isActive === true }"
-    >
-      Filtruj po nazwie
-    </v-chip>
-    <v-chip
-      @click="sortByValue"
-      class="filterButton"
-      :class="{ text: active === true }"
-    >
-      Filtruj po cenie (od najmniejszej)
-    </v-chip>
+    <FilterButton
+      @sort="sortByName"
+      :status="{ text: isActive === true }"
+      :filter-name="`Filtruj po nazwie`"
+    />
+    <FilterButton
+      @sort="sortByValue"
+      :status="{ text: active === true }"
+      :filter-name="`Filtruj po cenie (od najmniejszej)`"
+    />
   </div>
 </template>
 
 <script>
+import FilterButton from "@/components/FilterButton";
 export default {
   name: "FiltersComponent",
+  components: { FilterButton },
   props: {
     isActive: {
       type: Boolean,
