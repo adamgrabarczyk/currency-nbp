@@ -20,7 +20,8 @@ margin: 5%;
 }
 
 .text-left {
-    background-color: lightgrey;
+    background-color: #7c8391 !important;
+    color: #0c0d0d;
 }
 
 .v table {

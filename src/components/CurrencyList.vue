@@ -1,5 +1,5 @@
 <template>
-  <v-table height="450px">
+  <v-table fixed-header height="450px">
     <thead>
       <tr>
         <th class="text-left">Waluta</th>
