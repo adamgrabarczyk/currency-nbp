@@ -14,7 +14,7 @@
     </tbody>
     <tbody v-else>
       <tr>
-        <td class="no-results" colspan="2">Brak wyników wyszykiwania</td>
+        <td class="no-results" colspan="2">Brak wyników</td>
       </tr>
     </tbody>
   </v-table>

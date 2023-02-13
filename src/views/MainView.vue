@@ -1,18 +1,18 @@
 <template>
-  <main-component />
+  <app-component />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
 // Components
-import MainComponent from "../components/MainComponent.vue";
+import AppComponent from "../components/AppComponent.vue";
 
 export default defineComponent({
   name: "HomeView",
 
   components: {
-    MainComponent,
+    AppComponent,
   },
 });
 </script>

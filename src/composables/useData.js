@@ -97,7 +97,7 @@ export function useData() {
     searchPhrase.value = "";
   });
 
-  const getData = () => {
+  const getData = async () => {
     axios
       .get(Api)
       .then((response) => {
@@ -114,12 +114,15 @@ export function useData() {
       .catch((error) => {
         console.log(error);
       });
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   };
+  const promise = getData();
   onBeforeMount(async () => {
     await getData();
   });
 
   return {
+    promise,
     data,
     currentArray,
     currentPage,

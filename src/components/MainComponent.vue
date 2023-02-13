@@ -22,6 +22,7 @@ import PaginationFooter from "@/components/PaginationFooter";
 import ImageWrapper from "@/components/ImageWrapper";
 import FiltersComponent from "@/components/FiltersComponent";
 import CurrencyList from "@/components/CurrencyList";
+import { baseApiUrl } from "../../utils/api";
 
 export default {
   components: {
@@ -31,8 +32,9 @@ export default {
     PaginationFooter,
     SearchBar,
   },
-  setup() {
+  async setup() {
     const {
+      promise,
       currentArray,
       currentPage,
       sortByName,
@@ -42,6 +44,9 @@ export default {
       searchPhrase,
       clearSearchPhrase,
     } = useData();
+
+    await promise;
+    const response = await fetch(baseApiUrl);
 
     return {
       currentArray,
