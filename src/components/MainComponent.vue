@@ -4,11 +4,7 @@
     <h1 class="header-text">
       Aktualny kursu walut - API Narodowego Banku Polskiego
     </h1>
-    <search-bar
-      v-model="searchPhrase"
-      @input="handleInput"
-      @click:clear="clearSearchPhrase"
-    />
+    <search-bar v-model="searchPhrase" @click:clear="clearSearchPhrase" />
     <FiltersComponent
       @sort-by-value="sortByValue"
       @sort-by-name="sortByName"
@@ -44,7 +40,6 @@ export default {
       active,
       isActive,
       searchPhrase,
-      handleInput,
       clearSearchPhrase,
     } = useData();
 
@@ -56,7 +51,6 @@ export default {
       active,
       isActive,
       searchPhrase,
-      handleInput,
       clearSearchPhrase,
     };
   },

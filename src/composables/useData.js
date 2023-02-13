@@ -26,22 +26,6 @@ export function useData() {
     searchPhrase.value = "";
   };
 
-  const handleInput = () => {
-    const copyArr = protectedCurrentArray.value;
-    const searchValue = copyArr.filter((item) =>
-      item.currency
-        .toLocaleLowerCase()
-        .includes(searchPhrase.value.toLocaleLowerCase())
-    );
-    if (searchPhrase.value.length > 2) {
-      currentArray.value = searchValue;
-      currentArrayWithPhrase.value = searchValue;
-    } else if (searchPhrase.value.length < 3) {
-      currentArray.value = protectedCurrentArray.value;
-      currentArrayWithPhrase.value = protectedCurrentArray.value;
-    }
-  };
-
   const sort = (arr, func) => {
     const sorted = arr.sort((a, b) => {
       if (
@@ -88,12 +72,27 @@ export function useData() {
     active.value = !active.value;
   };
 
+  watch(searchPhrase, (newValue) => {
+    if (newValue.length >= 3) {
+      currentArray.value = protectedCurrentArray.value.filter((item) =>
+        item.currency
+          .toLocaleLowerCase()
+          .includes(searchPhrase.value.toLocaleLowerCase())
+      );
+      if (active.value) {
+        currentArray.value = sort(currentArray.value, "value");
+      }
+    } else {
+      currentArray.value = protectedCurrentArray.value;
+    }
+  });
+
   watch(currentPage, (newValue) => {
     protectedCurrentArray.value = data.value[newValue - 1];
     if (active.value) {
       currentArray.value = sort(protectedCurrentArray.value, "value");
     } else {
-      currentArray.value = protectedCurrentArray.value;
+      currentArray.value = sort(protectedCurrentArray.value, "");
     }
     searchPhrase.value = "";
   });
@@ -129,7 +128,6 @@ export function useData() {
     active,
     isActive,
     searchPhrase,
-    handleInput,
     clearSearchPhrase,
   };
 }
